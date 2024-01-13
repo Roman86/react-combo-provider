@@ -1,0 +1,60 @@
+{
+  "name": "react-combo-provider",
+  "version": "1.0.0",
+  "description": "Utility function to quickly generate (with 1 call) Contexts, Providers and hooks that share the memory efficiently",
+  "type": "commonjs",
+  "source": "src/index.ts",
+  "module": "dist/lib.mjs",
+  "main": "dist/lib.cjs",
+  "unpkg": "dist/lib.umd.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/lib.cjs",
+    "default": "./dist/lib.modern.js"
+  },
+  "mangle": {
+    "regex": "^_"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react",
+    "dev": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react -w",
+    "whats_there": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roman86/react-hooks-provider.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "context",
+    "provider",
+    "ts",
+    "types",
+    "typescript"
+  ],
+  "author": "Roman Kozodoi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roman86/react-hooks-provider/issues"
+  },
+  "homepage": "https://github.com/Roman86/react-hooks-provider#readme",
+  "devDependencies": {
+    "@types/react": "^18.2.47",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "eslint": "8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-react": "^7.32.2",
+    "microbundle": "^0.15.1",
+    "prettier": "^2.8.8",
+    "prettier-plugin-multiline-arrays": "^1.1.4"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  }
+}
