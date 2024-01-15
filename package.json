@@ -10,7 +10,7 @@
   "exports": {
     "types": "./dist/index.d.ts",
     "require": "./dist/lib.cjs",
-    "default": "./dist/lib.modern.js"
+    "default": "./dist/lib.modern.mjs"
   },
   "mangle": {
     "regex": "^_"
