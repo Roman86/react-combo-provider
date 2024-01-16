@@ -14,9 +14,9 @@ Most common scenario is a Store implementation. With Context Provider it's attac
 </details>
 
 Defining a Store Context, Provider and hooks (and also Types) requires some boilerplate.
-We might want "writing" components to be independent of rendering caused by data changes - then
+We might want the "writing" components to be independent of rendering caused by data changes - then
 "data" and "API" have to be provided with separate Contexts and hooks
-(see [the awesome article](https://www.developerway.com/posts/how-to-write-performant-react-apps-with-context) on this topic).
+(see [an awesome article](https://www.developerway.com/posts/how-to-write-performant-react-apps-with-context) on this topic).
 Means even more boilerplate.
 
 And if we (for example) have some model and want _every field_ to be changed and rendered independently -
