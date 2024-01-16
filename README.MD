@@ -1,12 +1,8 @@
-## Installation
-
-```bash
-npm i react-combo-provider
-```
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-combo-provider)](https://bundlephobia.com/package/react-combo-provider)
 
 ## What
 
-Utility function to quickly generate (with 1 call) [Contexts, Providers and hooks](https://react.dev/learn/passing-data-deeply-with-context) that share the memory efficiently.
+Tiny utility (around 0.7Kb minzipped) function to quickly generate (with 1 call) [Contexts, Providers and hooks](https://react.dev/learn/passing-data-deeply-with-context) that share the memory efficiently.
 
 Most common scenario is a Store implementation. With Context Provider it's attached to your DOM wherever you want (local or global - you decide).
 
