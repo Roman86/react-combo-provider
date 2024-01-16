@@ -1,6 +1,6 @@
 {
   "name": "react-combo-provider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tiny utility function (0.7kb) to quickly generate (with 1 call) Contexts, Providers and hooks that share the memory efficiently",
   "type": "commonjs",
   "sideEffects": false,
