@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Utility function to quickly generate (with 1 call) Contexts, Providers and hooks that share the memory efficiently",
   "type": "commonjs",
+  "sideEffects": false,
   "source": "src/index.ts",
   "module": "dist/lib.mjs",
   "main": "dist/lib.cjs",
@@ -33,6 +34,10 @@
     "hooks",
     "context",
     "provider",
+    "store",
+    "slice",
+    "stacked",
+    "scoped",
     "ts",
     "types",
     "typescript"
