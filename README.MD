@@ -38,7 +38,7 @@ It's easy to forget this fact - that's why generated Provider has a special auto
 
 ## How to use it
 
-### ➡️ You provide (function params)
+### You provide (function params)
 
 - provider base name (for the Provider component generation)
 - hooks (slices/contexts) names, as many as you want (each hook will be rendered independently due to its individual Context under the hood)
@@ -46,7 +46,7 @@ It's easy to forget this fact - that's why generated Provider has a special auto
   - with custom parameters for more control (will be Provider props, optional)
   - return an object that maps every hook to the data you need
 
-### ↩️ You get (function returns)
+### You get (function returns)
 
 - controllable Provider component
 - your generated hooks
