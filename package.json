@@ -43,7 +43,7 @@
     "typescript"
   ],
   "author": "Roman Kozodoi",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Roman86/react-hooks-provider/issues"
   },
