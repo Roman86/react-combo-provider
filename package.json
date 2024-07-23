@@ -21,8 +21,9 @@
     "/dist"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react",
-    "dev": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react -w",
+    "build/watch": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react -w",
     "whats_there": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
   },
   "repository": {
