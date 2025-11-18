@@ -21,7 +21,7 @@
     "/dist"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && git diff --quiet && git diff --exit-code --quiet || { echo \"Git working directory is not clean. Please commit or stash your changes.\"; exit 1; }",
     "build": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react",
     "build/watch": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react -w",
     "whats_there": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz"
@@ -62,5 +62,9 @@
   },
   "peerDependencies": {
     "react": "18"
+  },
+  "overrides": {
+    "js-yaml": "^4.1.1",
+    "glob": "^11.1.0"
   }
 }
