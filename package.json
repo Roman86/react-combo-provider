@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Roman86/react-hooks-provider.git"
+    "url": "git+https://github.com/Roman86/react-combo-provider.git"
   },
   "keywords": [
     "react",
@@ -44,9 +44,9 @@
   "author": "Roman Kozodoi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Roman86/react-hooks-provider/issues"
+    "url": "https://github.com/Roman86/react-combo-provider/issues"
   },
-  "homepage": "https://github.com/Roman86/react-hooks-provider#readme",
+  "homepage": "https://github.com/Roman86/react-combo-provider#readme",
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",
     "@types/react": "18",
