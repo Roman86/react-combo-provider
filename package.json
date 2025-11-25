@@ -50,6 +50,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",
     "@types/react": "18",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
