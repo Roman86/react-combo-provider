@@ -54,7 +54,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "^18 || ^19"
   },
   "overrides": {
     "js-yaml": "^4.1.1",
