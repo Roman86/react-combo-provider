@@ -1,17 +1,22 @@
 {
   "name": "react-combo-provider",
   "version": "1.0.19",
-  "description": "Tiny (around 0.7Kb minzipped) no dependencies utility function to quickly generate (with 1 call) Contexts, Providers and hooks that share the memory efficiently",
+  "description": "Tiny (~0.7 kB minzipped) zero-dependency function that generates a typed React Context Provider and hooks in one call. Each hook gets its own Context, so components re-render only for the data they use",
   "type": "module",
   "sideEffects": false,
-  "source": "src/index.ts",
   "module": "dist/index.mjs",
   "main": "dist/index.cjs",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "require": "./dist/index.cjs",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
   },
   "types": "dist/index.d.ts",
   "files": [
