@@ -2,55 +2,55 @@
 
 ## What
 
-Tiny (around 0.7Kb minzipped) no dependencies utility function to quickly generate (with 1 call) [Contexts, Providers and hooks](https://react.dev/learn/passing-data-deeply-with-context) that share the memory efficiently.
+Tiny (around 0.7 kB minzipped) zero-dependency utility function to quickly generate (with 1 call) [Contexts, Providers and hooks](https://react.dev/learn/passing-data-deeply-with-context) that share memory efficiently.
 
-Most common scenario is a Store implementation. With Context Provider it's attached to your DOM wherever you want (local or global - you decide).
+The most common scenario is a Store implementation. With a Context Provider, it's attached to your component tree wherever you want (locally or globally - you decide).
 
 ## Why
 
 <details>
 <summary>TL;DR</summary>
-🪚 Store made simple. Eliminates boilerplate while creating Contexts and hooks to access it. With solid rendering optimization out of the box ⚡️
+🪚 Store made simple. Eliminates the boilerplate of creating Contexts and hooks to access it. With solid rendering optimization out of the box ⚡️
 </details>
 
-Defining a Store Context, Provider and hooks (and also Types) requires some boilerplate.
+Defining a Store Context, Provider and hooks (and Types) requires some boilerplate.
 We might want the "writing" components to be independent of rendering caused by data changes - then
-"data" and "API" have to be provided with separate Contexts and hooks
+"data" and "API" have to be provided via separate Contexts and hooks
 (see [an awesome article](https://www.developerway.com/posts/how-to-write-performant-react-apps-with-context) on this topic).
-Means even more boilerplate.
+That means even more boilerplate.
 
 And if we (for example) have some model and want _every field_ to be changed and rendered independently -
 it would mean that every field should have _its own_ Context, Provider and hook.
-The code is pretty standard, but it's a lot of code - see examples below 👇
+The code is pretty standard, but it's a lot of code - see the examples below 👇
 
-This simple utility saves you dozens (or even hundreds) of code lines to implement your efficient Contexts/Stores.
+This simple utility saves you dozens (or even hundreds) of lines of code when implementing your efficient Contexts/Stores.
 
 ## How does it work
 
-Every created hook is linked to its dedicated Context under the hood for rendering optimization.
+Every generated hook is linked to its dedicated Context under the hood for rendering optimization.
 
 All the generated contexts stack within a single generated ComboProvider wrapper component for convenience.
-It's easy to forget this fact - that's why generated Provider has a special automatic "...ComboProvider" suffix.
+It's easy to forget this fact - that's why the generated Provider has a special automatic "...ComboProvider" suffix.
 
 ## How to use it
 
 ### You provide (function params)
 
-- provider base name (for the Provider component generation)
-- hooks (slices/contexts) names, as many as you want (each hook will be rendered independently due to its individual Context under the hood)
-- their shared memory scope (all the data that hooks are going to use, just like a regular hook)
-  - with custom parameters for more control (will be Provider props, optional)
+- a provider base name (used to generate the Provider component)
+- hook (slice/context) names, as many as you want (each hook re-renders independently, thanks to its individual Context under the hood)
+- their shared memory scope (all the data the hooks are going to use, just like a regular hook)
+  - with custom parameters for more control (they become optional Provider props)
   - return an object that maps every hook to the data you need
 
 ### You get (function returns)
 
-- controllable Provider component
+- a controllable Provider component
 - your generated hooks
 - 🎉 with all the names and types ready to be exported right away
 
 ## Example 1
 
-Simplest Context providing a value (let's provide the useState result: value + setter, no rendering separation)
+The simplest Context providing a value (let's provide the useState result: value + setter, no rendering separation)
 
 ```ts
 import { makeComboProviderAndHooks } from 'react-combo-provider';
@@ -58,19 +58,19 @@ import { useState } from 'react';
 
 // Provider component + hooks generated with all the types, use code completion and export them right away
 export const { CountStoreComboProvider, useCount } = makeComboProviderAndHooks(
-  'countStore', // provider base name (<x>ComboProvider component will be generated, with corresponding displayName)
-  ['count'], // a list of hooks/contexts to generate. Every item generates a <x>Context layer for your Provider and a use<X> hook
+  'countStore', // provider base name (an <x>ComboProvider component will be generated, with a corresponding displayName)
+  ['count'], // a list of hooks/contexts to generate. Every item generates an <x>Context layer for your Provider and a use<X> hook
   () => {
-    // provider's props can be defined as an argument here
+    // the provider's props can be defined as an argument here
     return {
-      // key = Context name (see array above); value = what hook returns (via its own context)
+      // key = Context name (see the array above); value = what the hook returns (via its own context)
       count: useState(0), // value for the useCount hook
     };
   },
 );
 ```
 
-If we omit comments - the code is really compact.
+If we omit the comments, the code is really compact.
 
 <details>
 <summary>Equivalent React code without ComboProvider</summary>
@@ -89,12 +89,12 @@ import React, {
 // define a Context type, makeComboProviderAndHooks infers your types automatically
 type Count = [number, Dispatch<SetStateAction<number>>];
 
-// create the Context instance with empty state for Provider check, makeComboProviderAndHooks does it for you
+// create the Context instance with an empty state for the Provider check, makeComboProviderAndHooks does it for you
 const CountContext = createContext<Count | null>(null);
 // displayName - makeComboProviderAndHooks generates it too
 CountContext.displayName = 'CountContext';
 
-// Context hook with user-friendly Provider check - makeComboProviderAndHooks generates the same for you
+// Context hook with a user-friendly Provider check - makeComboProviderAndHooks generates the same for you
 export function useCount(): Count {
   const context = useContext(CountContext);
   if (!context) {
@@ -103,19 +103,19 @@ export function useCount(): Count {
   return context;
 }
 
-// Context Provider component with displayName. Also generated by makeComboProviderAndHooks
+// Context Provider component with a displayName. Also generated by makeComboProviderAndHooks
 export function CountStoreProvider({ children }: PropsWithChildren): ReactElement {
   return <CountContext.Provider value={useState(0)}>{children}</CountContext.Provider>;
 }
 ```
 
-As we can see, actually useful code (useState(0) and a few titles) needs a lot of boilerplate around.
+As we can see, the actually useful code (useState(0) and a few names) needs a lot of boilerplate around it.
 
 </details>
 
 ## Example 2
 
-Same example, but now we want writers to be independent of changed data - 2 Contexts, 2 hooks (useCount, useSetCount)
+The same example, but now we want writers to be independent of data changes - 2 Contexts, 2 hooks (useCount, useSetCount)
 
 ```ts
 import { makeComboProviderAndHooks } from 'react-combo-provider';
@@ -134,7 +134,7 @@ export const { CountStoreComboProvider, useCount, useSetCount } = makeComboProvi
     ] = useState(0);
 
     return {
-      // key = Context name (see array above); value = what hook returns (with its own context)
+      // key = Context name (see the array above); value = what the hook returns (via its own context)
       count, // value for the useCount hook
       setCount, // value for the useSetCount hook
     };
@@ -144,7 +144,7 @@ export const { CountStoreComboProvider, useCount, useSetCount } = makeComboProvi
 
 We simply added 1 item to the definition array + 1 property to the returned mapping.
 
-Let's see how equivalent code grows up.
+Let's see how the equivalent code grows.
 
 <details>
 <summary>Equivalent code without ComboProvider 🙈</summary>
@@ -199,8 +199,8 @@ export function CountStoreProvider({ children }: PropsWithChildren): ReactElemen
 }
 ```
 
-Pretend now that we want more fields in our store. And many other stores in our app.
+Now imagine that we want more fields in our store. And many other stores in our app.
 
 </details>
 
-With ComboProvider Context (and Store) creation and rendering optimization have never been easier.
+With ComboProvider, Context (and Store) creation and rendering optimization have never been easier.
