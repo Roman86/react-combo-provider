@@ -1,6 +1,6 @@
 {
   "name": "react-combo-provider",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Tiny (~0.7 kB minzipped) zero-dependency function that generates a typed React Context Provider and hooks in one call. Each hook gets its own Context, so components re-render only for the data they use",
   "type": "module",
   "sideEffects": false,
