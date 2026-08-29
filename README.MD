@@ -1,153 +1,71 @@
+[![npm version](https://badge.fury.io/js/react-combo-provider.svg)](https://badge.fury.io/js/react-combo-provider)
+[![NPM Downloads](https://img.shields.io/npm/dm/react-combo-provider)](https://www.npmjs.com/package/react-combo-provider)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-combo-provider)](https://bundlephobia.com/package/react-combo-provider)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/romanjs)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-ea4aaa?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/Roman86)
 
-## What
+# react-combo-provider
 
-Tiny (around 0.7 kB minzipped) zero-dependency utility function to quickly generate (with 1 call) [Contexts, Providers and hooks](https://react.dev/learn/passing-data-deeply-with-context) that share memory efficiently.
+A tiny (~0.7 kB minzipped, zero-dependency) function that turns a regular hook into a Context Provider and a set of typed hooks. Each generated hook gets its own Context under the hood, so components re-render only when the data they actually use changes.
 
-The most common scenario is a Store implementation. With a Context Provider, it's attached to your component tree wherever you want (locally or globally - you decide).
+## The problem
 
-## Why
+Sharing state via Context the right way takes a surprising amount of code. For every slice you need a Context, a Provider and a typed hook with a null check. To keep "writer" components from re-rendering on every data change, data and API [have to live in separate Contexts](https://www.developerway.com/posts/how-to-write-performant-react-apps-with-context). And if you want every field of your model to update independently, each field needs its own Context, Provider and hook.
 
-<details>
-<summary>TL;DR</summary>
-🪚 Store made simple. Eliminates the boilerplate of creating Contexts and hooks to access it. With solid rendering optimization out of the box ⚡️
-</details>
+The pattern is standard. The amount of code is not.
 
-Defining a Store Context, Provider and hooks (and Types) requires some boilerplate.
-We might want the "writing" components to be independent of rendering caused by data changes - then
-"data" and "API" have to be provided via separate Contexts and hooks
-(see [an awesome article](https://www.developerway.com/posts/how-to-write-performant-react-apps-with-context) on this topic).
-That means even more boilerplate.
+## Install
 
-And if we (for example) have some model and want _every field_ to be changed and rendered independently -
-it would mean that every field should have _its own_ Context, Provider and hook.
-The code is pretty standard, but it's a lot of code - see the examples below 👇
-
-This simple utility saves you dozens (or even hundreds) of lines of code when implementing your efficient Contexts/Stores.
-
-## How does it work
-
-Every generated hook is linked to its dedicated Context under the hood for rendering optimization.
-
-All the generated contexts stack within a single generated ComboProvider wrapper component for convenience.
-It's easy to forget this fact - that's why the generated Provider has a special automatic "...ComboProvider" suffix.
-
-## How to use it
-
-### You provide (function params)
-
-- a provider base name (used to generate the Provider component)
-- hook (slice/context) names, as many as you want (each hook re-renders independently, thanks to its individual Context under the hood)
-- their shared memory scope (all the data the hooks are going to use, just like a regular hook)
-  - with custom parameters for more control (they become optional Provider props)
-  - return an object that maps every hook to the data you need
-
-### You get (function returns)
-
-- a controllable Provider component
-- your generated hooks
-- 🎉 with all the names and types ready to be exported right away
-
-## Example 1
-
-The simplest Context providing a value (let's provide the useState result: value + setter, no rendering separation)
-
-```ts
-import { makeComboProviderAndHooks } from 'react-combo-provider';
-import { useState } from 'react';
-
-// Provider component + hooks generated with all the types, use code completion and export them right away
-export const { CountStoreComboProvider, useCount } = makeComboProviderAndHooks(
-  'countStore', // provider base name (an <x>ComboProvider component will be generated, with a corresponding displayName)
-  ['count'], // a list of hooks/contexts to generate. Every item generates an <x>Context layer for your Provider and a use<X> hook
-  () => {
-    // the provider's props can be defined as an argument here
-    return {
-      // key = Context name (see the array above); value = what the hook returns (via its own context)
-      count: useState(0), // value for the useCount hook
-    };
-  },
-);
+```sh
+npm i react-combo-provider
 ```
 
-If we omit the comments, the code is really compact.
+Peer dependency: React 18 or 19.
 
-<details>
-<summary>Equivalent React code without ComboProvider</summary>
+## Usage
 
-```tsx
-import React, {
-  createContext,
-  type Dispatch,
-  type PropsWithChildren,
-  type ReactElement,
-  type SetStateAction,
-  useContext,
-  useState,
-} from 'react';
-
-// define a Context type, makeComboProviderAndHooks infers your types automatically
-type Count = [number, Dispatch<SetStateAction<number>>];
-
-// create the Context instance with an empty state for the Provider check, makeComboProviderAndHooks does it for you
-const CountContext = createContext<Count | null>(null);
-// displayName - makeComboProviderAndHooks generates it too
-CountContext.displayName = 'CountContext';
-
-// Context hook with a user-friendly Provider check - makeComboProviderAndHooks generates the same for you
-export function useCount(): Count {
-  const context = useContext(CountContext);
-  if (!context) {
-    throw new Error('useCount must be within CountStoreProvider');
-  }
-  return context;
-}
-
-// Context Provider component with a displayName. Also generated by makeComboProviderAndHooks
-export function CountStoreProvider({ children }: PropsWithChildren): ReactElement {
-  return <CountContext.Provider value={useState(0)}>{children}</CountContext.Provider>;
-}
-```
-
-As we can see, the actually useful code (useState(0) and a few names) needs a lot of boilerplate around it.
-
-</details>
-
-## Example 2
-
-The same example, but now we want writers to be independent of data changes - 2 Contexts, 2 hooks (useCount, useSetCount)
+Define a store with one call:
 
 ```ts
+// countStore.ts
 import { makeComboProviderAndHooks } from 'react-combo-provider';
 import { useState } from 'react';
 
 export const { CountStoreComboProvider, useCount, useSetCount } = makeComboProviderAndHooks(
-  'countStore',
-  [
-    'count',
-    'setCount',
-  ], // 2 contexts/hooks
+  'countStore', // base name: generates the <CountStoreComboProvider> component
+  ['count', 'setCount'], // hooks to generate: useCount and useSetCount, each with its own Context
   () => {
-    const [
-      count,
-      setCount,
-    ] = useState(0);
-
-    return {
-      // key = Context name (see the array above); value = what the hook returns (via its own context)
-      count, // value for the useCount hook
-      setCount, // value for the useSetCount hook
-    };
+    // a regular hook: the shared memory of the store
+    const [count, setCount] = useState(0);
+    return { count, setCount }; // key = hook name, value = what that hook returns
   },
 );
 ```
 
-We simply added 1 item to the definition array + 1 property to the returned mapping.
+That's the whole store. Use it:
 
-Let's see how the equivalent code grows.
+```tsx
+const Value = () => <div>{useCount()}</div>; // re-renders when count changes
+
+const Increment = () => {
+  const setCount = useSetCount();
+  // never re-renders on count changes: setCount lives in its own Context
+  return <button onClick={() => setCount((c) => c + 1)}>+1</button>;
+};
+
+const App = () => (
+  // mount it wherever the state should live: app root or any subtree
+  <CountStoreComboProvider>
+    <Value />
+    <Increment />
+  </CountStoreComboProvider>
+);
+```
+
+Everything is typed automatically: `useCount()` returns `number`, `useSetCount()` returns `Dispatch<SetStateAction<number>>`. The names and types of the hooks and the Provider are inferred from your code, ready to be exported right away.
 
 <details>
-<summary>Equivalent code without ComboProvider 🙈</summary>
+<summary>The same store written by hand (what this library saves you) 🙈</summary>
 
 ```tsx
 import React, {
@@ -199,8 +117,29 @@ export function CountStoreProvider({ children }: PropsWithChildren): ReactElemen
 }
 ```
 
-Now imagine that we want more fields in our store. And many other stores in our app.
+Now imagine more fields in the store. And a few more stores in the app.
 
 </details>
 
-With ComboProvider, Context (and Store) creation and rendering optimization have never been easier.
+## Provider props
+
+The store hook can take an argument. It becomes the props of the generated Provider:
+
+```tsx
+export const { UserStoreComboProvider, useUser } = makeComboProviderAndHooks(
+  'userStore',
+  ['user'],
+  ({ initialName }: { initialName: string }) => ({
+    user: useState({ name: initialName }),
+  }),
+);
+
+// <UserStoreComboProvider initialName="Alice">...</UserStoreComboProvider>
+```
+
+## Good to know
+
+- Calling a hook outside of its Provider throws a clear error ("useCount must be within CountStoreComboProvider") instead of silently returning undefined.
+- The Provider and every Context get proper displayName values, so React DevTools show meaningful names.
+- The generated Provider name always ends with "...ComboProvider" as a reminder that it stacks several Contexts inside.
+- Each mounted Provider instance holds its own independent state, so the same store can be reused in multiple places (scoped stores).
